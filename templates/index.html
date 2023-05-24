@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix-It</title>
+    <link rel="shortcut icon" href="https://www.fix-it.ai/assets/fixit_white_bg.6ca644aa.svg" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <style>
+        .right2{
+            padding-top: 10vh;
+            height: auto;
+            flex-direction: column;
+            display: none;
+            text-align: center;
+        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            font-size: xx-large;
+            padding-top: 20vh;
+            
+        }
+        .logo {
+            display: inline-block;
+            width: 35px; 
+        }
+        .box1 {
+            display: flex;
+    width: 60vw; 
+    background-color: #e5eeac;
+    align-items: flex-start;
+    height: 50px;
+    border-radius: 20px;
+    /* justify-content: space-around; */
+    padding-top: 10px;
+    padding-bottom: 10px;
+        }
+        .box2 {
+            display: flex;
+    width: 60vw; 
+    background-color: #ddd5ddf0;
+    align-items: flex-start;
+    height: auto;
+    border-radius: 20px;
+    /* justify-content: space-around; */
+    padding-top: 10px;
+    padding-bottom: 10px;
+        }
+        .temp{
+            width: 30px;
+            padding-left: 10px;
+        }
+        .text {
+            padding-left: 10px;
+            margin-top: 10px; 
+        }
+        .questionp{
+            padding-left: 10px;
+        }
+        .input-container {
+            margin-top: 20px;
+
+        }
+        .input-container1 {
+           margin-top: 400px;
+        }
+        .input-bar {
+            padding: 6px; 
+            width: 600px; 
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: small;
+
+        }
+        .submit-button {
+            margin-top: 10px;
+            padding: 3px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: large;
+        }
+        .ans{
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body class="bg-chatwhite-50">
+    <div class="container">
+        <img class="logo" src="https://www.fix-it.ai/assets/fixit_gray_bg.bd136e1b.svg" alt="Fix-It Logo">
+        <div class="text">
+            Fix-It
+        </div>
+        <div class="input-container">
+            <input class="input-bar" type="text" placeholder="How can we help you?" id="question">
+            <button id="sendButton" class="submit-button" type="submit">Submit</button>
+        </div>
+        
+    </div>
+    <div class="right2 ">
+        <div class="box1 ">
+            <img class="temp" src="https://www.fix-it.ai/assets/userSvg.f9ef568c.svg" alt="">
+            <div id="q1p" class="questionp"> hi </div>
+        </div>
+        <div class="box2 ">
+            <img class="temp" src="https://www.fix-it.ai/assets/fixit_gray_bg.bd136e1b.svg" alt="">
+            <div class="ans">
+                <div id="q1" class="questionp"> hi </div>
+                <div id="a1" class="questionp"> Loading... </div>
+            </div>
+        </div>
+        <div class="input-container1">
+            <input class="input-bar" type="text" placeholder="How can we help you?" id="localtemp">
+            <button id="sendButton1" class="submit-button" type="submit">Submit</button>
+        </div>
+    </div>
+    <script >
+        async function postData(url = "", data = {}) { 
+    const response = await fetch(url, {
+      method: "POST", headers: {
+        "Content-Type": "application/json", 
+      }, body: JSON.stringify(data),  
+    });
+    return response.json(); 
+  }
+        sendButton.addEventListener("click",async()=>{
+            questionInput=document.getElementById('question').value;
+            document.getElementById('question').value="";
+            document.querySelector(".right2").style.display="block"
+            document.querySelector(".container").style.display="none"
+            q1.innerHTML = questionInput;
+            q1p.innerHTML = questionInput;
+    let result = await postData("/api", {"question": questionInput})
+    a1.innerHTML = result.answer
+        });
+        sendButton1.addEventListener("click",async()=>{
+            questionInput=document.getElementById('localtemp').value;
+            document.getElementById('localtemp').value="";
+            q1.innerHTML = questionInput;
+            q1p.innerHTML = questionInput;
+    let result = await postData("/api", {"question": questionInput})
+    a1.innerHTML = result.answer
+        });
+    </script>
+</body>
+</html>
